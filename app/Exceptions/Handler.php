@@ -2,11 +2,19 @@
 
 namespace App\Exceptions;
 
+use App\Traits\ApiResponse;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+use function Laravel\Prompts\error;
 
 class Handler extends ExceptionHandler
 {
+    use ApiResponse;
     /**
      * A list of exception types with their corresponding custom log levels.
      *
@@ -44,5 +52,26 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+
+    public function render($request, Throwable $e)
+    {
+        if ($e instanceof AuthenticationException)
+            return $this->errorResponse($e->getMessage(), 401);
+
+        if ($e instanceof ModelNotFoundException)
+            return $this->errorResponse($e->getMessage(), 404);
+
+        if ($e instanceof NotFoundHttpException)
+            return $this->errorResponse($e->getMessage(), 404);
+
+        if ($e instanceof MethodNotAllowedHttpException)
+            return $this->errorResponse($e->getMessage(), 405);
+
+        if ($e instanceof ValidationException)
+            return  $this->errorResponse($e->errors(), 422);
+
+        return $this->errorResponse($e->getMessage(), 500);
     }
 }
