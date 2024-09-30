@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -22,6 +20,25 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
 
             UserSeeder::class,
+
+            ProvinceSeeder::class,
+            CitySeeder::class,
+
+            BranchTypeSeeder::class,
+            CourtBrancheSeeder::class,
+
+            OrganizationalPostSeeder::class,
+
+            JudgesSeeder::class,
+
+            DegreeSeeder::class,
+            LawyerSeeder::class,
+
+            DocumentTypeSeeder::class,
+            DocumentStatusSeeder::class,
+            DocumentSeeder::class,
+
+            PetitionSeeder::class,
         ]);
     }
 }

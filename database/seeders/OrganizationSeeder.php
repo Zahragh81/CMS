@@ -14,14 +14,14 @@ class OrganizationSeeder extends Seeder
             [
 //                'id' => 1,
                 'name' => 'سازمان بهزیستی',
-                'national_id' => '123456789',
+                'national_id' => '8574129632',
                 'parent_id' => null,
                 'status' => true,
             ],
             [
 //                'id' => 2,
                 'name' => 'سازمان تامین اجتمایی',
-                'national_id' => '789654123',
+                'national_id' => '15426384510',
                 'parent_id' => null,
                 'status' => true,
             ],

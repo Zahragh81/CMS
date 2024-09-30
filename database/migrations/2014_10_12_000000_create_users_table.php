@@ -10,14 +10,14 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('username');
+            $table->string('username')->unique();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('mobile');
+            $table->string('mobile')->unique();
             $table->boolean('status')->default(true);
             $table->string('password');
-            $table->foreignId('genders_id')->constrained('genders');
-            $table->foreignId('organizations_id')->constrained('organizations');
+            $table->foreignId('gender_id')->constrained();
+            $table->foreignId('organization_id')->constrained();
             $table->timestamps();
             $table->softDeletes();
         });

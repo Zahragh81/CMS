@@ -13,7 +13,7 @@ class RoleResource extends JsonResource
           'id' => $this->id,
           'name' => $this->name,
             'title' => $this->title,
-            'roleGroups' => new RoleGroupResource($this->whenLoaded('roleGroup'))
+            'roleGroup' => new RoleGroupResource($this->whenLoaded('roleGroup'))
         ];
     }
 }

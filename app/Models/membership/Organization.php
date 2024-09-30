@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\membership;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\BaseModel;
+use App\Models\User;
 
 class Organization extends BaseModel
 {
@@ -14,7 +14,7 @@ class Organization extends BaseModel
 
     public function parent()
     {
-        return $this->belongsTo(Organization::class, 'parent_id');
+        return $this->belongsTo(Organization::class);
     }
 
     public function children()

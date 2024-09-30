@@ -14,21 +14,12 @@ class OrganizationRequest extends FormRequest
 
     public function rules(): array
     {
-//        if ($this->isMethod('POST')){
         return [
             'name' => 'required|string|max:255',
-            'national_id' => 'required|string|unique:organizations,national_id|min:8|max:15',
+            'national_id' => 'required|unique:organizations,national_id,' . $this->organization?->id,
             'parent_id' => 'nullable|exists:organizations,id',
-            'avatar' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048'
+            'avatar' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
         ];
-//        }else{
-//            return [
-//                'name' => 'required|string|max:255',
-//                'national_id' => 'required|string|unique:organizations,national_id|max:255',
-//                'parent_id' => 'nullable|exists:organizations,id'
-//            ];
-//        }
-
 
 
     }

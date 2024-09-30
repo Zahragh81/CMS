@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\membership\GenderResource;
+use App\Http\Resources\membership\OrganizationResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,7 +20,7 @@ class UserResource extends JsonResource
             'last_name' => $this->last_name,
             'mobile' => $this->mobile,
             'status' => $this->status,
-            'avatar' => $this->avatar ? $this->avatar->path : null,
+            'avatar' => $this->avatar ? asset($this->avatar->path) : null,
 
             'gender' => new GenderResource($this->whenLoaded('gender')),
             'organization' => new OrganizationResource($this->whenLoaded('organization')),

@@ -4,35 +4,22 @@ namespace App\Http\Controllers\admin\membership;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrganizationRequest;
-use App\Http\Resources\OrganizationResource;
-use App\Models\Organization;
-use App\Models\Permission;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Http\Resources\membership\OrganizationResource;
+use App\Models\membership\Organization;
 use Illuminate\Support\Facades\Storage;
 
 class OrganizationController extends Controller
 {
     public function index()
     {
-        $organizations = Organization::all();
+        $organizations = Organization::select(['id', 'name', 'national_id', 'status', 'parent_id'])
+            ->with(['parent', 'avatar'])
+            ->where(function ($q) {
+                $q->where('name', 'like', $this->search)->orWhere('national_id', 'like', $this->search);
+            })
+            ->paginate($this->first);
 
-        return OrganizationResource::collection($organizations->load('parent'));
-    }
-
-    //paginate
-//    public function index(Request $request)
-//    {
-//        $perPage = $request->input('per_page', 10);
-//        $organizations = Organization::with('parent')->paginate($perPage);
-//
-//        return OrganizationResource::collection($organizations);
-//    }
-
-
-    public function show(Organization $organization)
-    {
-        return new OrganizationResource($organization->load('parent'));
+        return OrganizationResource::collection($organizations);
     }
 
 
@@ -57,6 +44,12 @@ class OrganizationController extends Controller
         }
 
         return self::successResponse();
+    }
+
+
+    public function show(Organization $organization)
+    {
+        return new OrganizationResource($organization->load('parent'));
     }
 
 
@@ -90,7 +83,6 @@ class OrganizationController extends Controller
     }
 
 
-
     public function destroy(Organization $organization)
     {
         if ($organization->avatar) {
@@ -113,7 +105,6 @@ class OrganizationController extends Controller
     {
         return self::successResponse([
             'organizations' => Organization::select(['id', 'name'])->get(),
-
         ]);
     }
 }

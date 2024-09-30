@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\membership;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class GenderResource extends JsonResource
+class BranchTypeResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-//        return parent::toArray($request);
-        return [
+        return  [
             'id' => $this->id,
             'name' => $this->name,
-            'status' => $this->status,
+            'status' => $this->status
         ];
     }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\membership\File;
+use App\Models\membership\Gender;
+use App\Models\membership\Organization;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -30,13 +33,13 @@ class User extends Authenticatable
 
     public function organization()
     {
-        return $this->belongsTo(Organization::class, 'organizations_id');
+        return $this->belongsTo(Organization::class);
     }
 
 
     public function gender()
     {
-        return $this->belongsTo(Gender::class, 'genders_id');
+        return $this->belongsTo(Gender::class);
     }
 
     public function avatar()

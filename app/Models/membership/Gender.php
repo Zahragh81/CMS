@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\membership;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\BaseModel;
+use App\Models\User;
 
 class Gender extends BaseModel
 {

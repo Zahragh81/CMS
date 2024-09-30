@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Permission;
-use App\Models\Role;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\membership\Permission;
+use App\Models\membership\Role;
 use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder

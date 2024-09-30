@@ -4,14 +4,10 @@ namespace App\Http\Controllers\auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
-use App\Http\Resources\AuthResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class AuthController extends Controller
 {
@@ -19,14 +15,15 @@ class AuthController extends Controller
     {
         $user = User::firstWhere('username', $request->username);
 
-
         if (!$user || !Hash::check($request->password, $user->password))
             return self::successResponse('اطلاعات وارد شده معتبر نیست');
 
         $token = $user->createToken('api')->plainTextToken;
 
         return self::successResponse([
-            'user' => $user,
+            'user' => new UserResource($user->load([
+                'organization:id,name',
+            ])),
             'token' => $token
         ]);
     }
@@ -54,10 +51,9 @@ class AuthController extends Controller
 //    }
 
 
-
     public function logout()
     {
-        Auth::user()->tokens()->delete();
+        Auth::user()->currentAccessToken()->delete();
 
         return self::successResponse();
     }

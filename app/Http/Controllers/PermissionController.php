@@ -3,24 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PermissionResource;
-use App\Models\Permission;
-use App\Models\PermissionGroup;
-use Illuminate\Http\Request;
+use App\Models\membership\Permission;
 
 class PermissionController extends Controller
 {
     public function index()
     {
-        $permissions = Permission::with('permissionGroup')->get();
+       $permissions = Permission::select(['id', 'name', 'title', 'permission_group_id'])
+           ->with('permissionGroup:id,name')
+           ->where(function ($q){
+               $q->where('name', 'like', $this->search)->orWhere('title', 'like', $this->search);
+           })->paginate($this->first);
 
-        return PermissionResource::collection($permissions);
-    }
-
-
-    public function upsertData()
-    {
-        return self::successResponse([
-            'permissionGroup' => PermissionGroup::select(['id', 'name'])->get()
-        ]);
+       return PermissionResource::collection($permissions);
     }
 }

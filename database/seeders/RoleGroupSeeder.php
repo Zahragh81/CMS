@@ -2,8 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\RoleGroup;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\membership\RoleGroup;
 use Illuminate\Database\Seeder;
 
 class RoleGroupSeeder extends Seeder

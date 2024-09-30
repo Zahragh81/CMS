@@ -15,14 +15,13 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => 'required|string',
+            'username' => "required|unique:users,username,{$this->user?->id}|digits:10",
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'mobile' => 'required|string|max:20',
-            'password' => 'required|string|min:6',
+            'mobile' => 'required|digits:11|unique:users,mobile,' . $this->user?->id,
             'avatar' => 'nullable|file|mimes:jpeg,png,jpg|max:2048',
-            'genders_id' => 'required|exists:genders,id',
-            'organizations_id' => 'nullable|exists:organizations,id'
+            'gender_id' => 'required|exists:genders,id',
+            'organization_id' => 'nullable|exists:organizations,id '
         ];
     }
 }

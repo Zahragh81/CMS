@@ -13,21 +13,30 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'username' => '0640788971',
-                'first_name' => 'zahra',
-                'last_name' => 'gholizadeh',
+                'first_name' => 'زهرا',
+                'last_name' => 'قلیزاده',
                 'mobile' => '09928458681',
-                'password' => '123456',
-                'genders_id' => '1',
-                'organizations_id' => '1'
+                'password' => '0640788971',
+                'gender_id' => '1',
+                'organization_id' => '1'
             ],
             [
                 'username' => '5630161237',
-                'first_name' => 'zahra',
-                'last_name' => 'hashemi',
+                'first_name' => 'زهرا',
+                'last_name' => 'هاشمی',
                 'mobile' => '0938485943',
-                'password' => '123456',
-                'genders_id' => '1',
-                'organizations_id' => '2'
+                'password' => '5630161237',
+                'gender_id' => '1',
+                'organization_id' => '2'
+            ],
+            [
+                'username' => '0640949797',
+                'first_name' => 'حمیده',
+                'last_name' => 'بهشتی',
+                'mobile' => '09903594534',
+                'password' => '0640949797',
+                'gender_id' => '1',
+                'organization_id' => '2'
             ]
         ];
 

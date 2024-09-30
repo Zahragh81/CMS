@@ -5,47 +5,39 @@ namespace App\Http\Controllers\admin\membership;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
-use App\Models\Gender;
-use App\Models\Organization;
-use App\Models\PermissionGroup;
-use App\Models\RoleGroup;
+use App\Models\membership\Gender;
+use App\Models\membership\Organization;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use function App\Helpers\user_search;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::select(['id', 'username', 'first_name', 'last_name', 'mobile', 'status', 'gender_id', 'organization_id'])
+            ->with([
+                'gender:id,name',
+                'organization:id,name'
+            ])
+            ->where(fn ($q) => user_search($q, $this->search))
+//            ->where(function ($q) {
+//                $q->where('username', 'like', $this->search)->orWhere('last_name', 'like', $this->search);
+//            })
+            ->paginate($this->first);
 
-        return UserResource::collection($users->load('gender', 'organization'));
-    }
-
-//paginate
-//    public function index(Request $request)
-//    {
-//        $perPage = $request->input('per_page', 10);
-//        $users = User::with('gender', 'organization')->paginate($perPage);
-//
-//        return UserResource::collection($users);
-//    }
-
-
-    public function show(User $user)
-    {
-        return new UserResource($user->load('gender', 'organization'));
+        return UserResource::collection($users);
     }
 
 
     public function store(UserRequest $request)
     {
-        $user = User::create($request->all());
+        $inputs = $request->all();
+        $inputs['password'] = $request->username;
+
+        $user = User::create($inputs);
 
         if ($request->hasFile('file')) {
-            $file = $request->file('file');
-
             $file = $request->file('file');
 
             $fileName = uniqid() . '.' . $file->extension();
@@ -62,6 +54,15 @@ class UserController extends Controller
         }
 
         return self::successResponse();
+    }
+
+
+    public function show(User $user)
+    {
+        return new UserResource($user->load([
+            'gender:id,name',
+            'organization:id,name'
+        ]));
     }
 
 
@@ -113,7 +114,7 @@ class UserController extends Controller
     }
 
 
-    public function upsertData(Request $request)
+    public function upsertData()
     {
         return self::successResponse([
             'genders' => Gender::select(['id', 'name'])->get(),

@@ -3,17 +3,16 @@
 namespace App\Http\Controllers\admin\membership;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\OrganizationRequest;
-use App\Http\Resources\OrganizationResource;
-use App\Models\Organization;
-use Illuminate\Http\Request;
+use App\Http\Resources\membership\OrganizationResource;
+use App\Models\membership\Organization;
 
 class SelectController extends Controller
 {
-    public function organizations(OrganizationRequest $request)
+    public function organization()
     {
         $organizations = Organization::select(['id', 'name'])
-            ->where('name' , 'like', "%$request->search%")
+            ->where('name' , 'like', $this->search)
+            ->whereNotNull('parent_id')
             ->limit(10)
             ->get();
 
