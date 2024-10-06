@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin\membership;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\DocumentRequest;
 use App\Http\Resources\membership\DocumentResource;
 use App\Models\membership\BranchType;
@@ -22,15 +23,58 @@ class DocumentController extends Controller
     public function index()
     {
         $documents = Document::where('user_id', Auth::id())
-        ->select(['id', 'file_number', 'document_type_id', 'lawyer_id', 'user_id', 'court_branch_id', 'court_class_number', 'court_filing_number', 'document_status_id', 'description', 'status'])
+            ->where('document_status_id', 1)
+        ->select(['id', 'file_number', 'document_type_id', 'lawyer_id','plaintiff_id', 'court_branch_id', 'court_class_number', 'court_filing_number', /*'document_status_id',*/ 'description', 'status'])
             ->with([
                 'documentType:id,name',
                 'lawyer' => fn ($q) => $q->select(['id', 'office_name', 'user_id'])->with([
                     'user:id,username,first_name,last_name'
                 ]),
-                'user:id,username,first_name,last_name',
+                'plaintiff:id,username,first_name,last_name',
                 'courtBranch:id,name,branch_code',
-                'documentStatus:id,name',
+                'files'
+            ])
+            ->where(fn ($q) => $q->where('file_number', 'like', $this->search))
+            ->paginate($this->first);
+
+        return DocumentResource::collection($documents);
+    }
+
+
+    public function closedIndex()
+    {
+        $documents = Document::where('user_id', Auth::id())
+            ->where('document_status_id', 2)
+            ->select(['id', 'file_number', 'document_type_id', 'lawyer_id','plaintiff_id', 'court_branch_id', 'court_class_number', 'court_filing_number', /*'document_status_id',*/ 'description', 'status'])
+            ->with([
+                'documentType:id,name',
+                'lawyer' => fn ($q) => $q->select(['id', 'office_name', 'user_id'])->with([
+                    'user:id,username,first_name,last_name'
+                ]),
+                'plaintiff:id,username,first_name,last_name',
+                'courtBranch:id,name,branch_code',
+                'files'
+            ])
+            ->where(fn ($q) => $q->where('file_number', 'like', $this->search))
+            ->paginate($this->first);
+
+        return DocumentResource::collection($documents);
+    }
+
+
+    public function stagnantIndex()
+    {
+        $documents = Document::where('user_id', Auth::id())
+            ->where('document_status_id', 3)
+            ->select(['id', 'file_number', 'document_type_id', 'lawyer_id','plaintiff_id', 'court_branch_id', 'court_class_number', 'court_filing_number', /*'document_status_id',*/ 'description', 'status'])
+            ->with([
+                'documentType:id,name',
+
+                'lawyer' => fn ($q) => $q->select(['id', 'office_name', 'user_id'])->with([
+                    'user:id,username,first_name,last_name'
+                ]),
+                'plaintiff:id,username,first_name,last_name',
+                'courtBranch:id,name,branch_code',
                 'files'
             ])
             ->where(fn ($q) => $q->where('file_number', 'like', $this->search))
@@ -74,7 +118,7 @@ class DocumentController extends Controller
             'lawyer' => fn ($q) => $q->select(['id', 'office_name', 'user_id'])->with([
                 'user:id,username,first_name,last_name'
             ]),
-            'user:id,username,first_name',
+            'plaintiff:id,username,first_name,last_name',
             'courtBranch:id,name,branch_code',
             'documentStatus:id,name',
             'files'
@@ -134,12 +178,32 @@ class DocumentController extends Controller
 
     public function upsertData()
     {
+//        $currentUser = Auth::user();
+
         return self::successResponse([
             'documentTypes' => DocumentType::select(['id', 'name'])->get(),
             'lawyers' => Lawyer::with('user:id,username,first_name,last_name')->select(['id', 'office_name', 'user_id'])->get(),
-            'users' => User::select(['id', 'username', 'first_name', 'last_name'])->get(),
+            'plaintiffs' => User::select(['id', 'username', 'first_name', 'last_name'])->get(),
             'courtBranch' => CourtBranch::select(['id', 'name', 'branch_code'])->get(),
-            'documentStatuses' => DocumentStatus::select(['id', 'name'])->get(),
+//            'documentStatuses' => DocumentStatus::select(['id', 'name'])->get(),
+//            'currentUser' => [
+//                'id' => $currentUser->id,
+//                'username' => $currentUser->username,
+//                'first_name' => $currentUser->first_name,
+//                'last_name' => $currentUser->last_name,
+//            ]
         ]);
     }
+
+
+    public function changeStatus(ChangeStatusRequest $request, Document $document)
+    {
+        $newStatus = $request->document_status_id;
+
+        $document->document_status_id = $newStatus;
+        $document->save();
+        return self::successResponse();
+    }
+
+
 }

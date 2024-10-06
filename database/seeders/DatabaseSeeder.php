@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Http\Resources\membership\ProtestationStatusResource;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -39,6 +40,12 @@ class DatabaseSeeder extends Seeder
             DocumentSeeder::class,
 
             PetitionSeeder::class,
+
+            RulingStatusSeeder::class,
+            RulingSeeder::class,
+
+            ProtestationStatusSeeder::class,
+            ProtestationSeeder::class
         ]);
     }
 }

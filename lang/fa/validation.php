@@ -207,5 +207,6 @@ return [
         "court_class_number" => "شماره کلاسه دادگاه",
         "court_filing_number" => "شماره بایگانی دادگاه",
         "file_number" => "شماره پرونده",
+        "petition_number" => "شماره دادخواست",
     ],
 ];

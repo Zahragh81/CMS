@@ -22,6 +22,12 @@ class Document extends BaseModel
         return $this->belongsTo(User::class);
     }
 
+
+    public function plaintiff()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function courtBranch()
     {
         return $this->belongsTo(CourtBranch::class);
@@ -40,6 +46,16 @@ class Document extends BaseModel
     public function petitions()
     {
         return $this->hasMany(Petition::class);
+    }
+
+    public function rulings()
+    {
+        return $this->hasMany(Ruling::class);
+    }
+
+    public function protestations()
+    {
+        return $this->hasMany(Protestation::class);
     }
 
 }

@@ -9,6 +9,8 @@ use App\Http\Controllers\admin\membership\LawyerController;
 use App\Http\Controllers\admin\membership\OrganizationalPostController;
 use App\Http\Controllers\admin\membership\OrganizationController;
 use App\Http\Controllers\admin\membership\PetitionController;
+use App\Http\Controllers\admin\membership\ProtestationController;
+use App\Http\Controllers\admin\membership\RulingController;
 use App\Http\Controllers\admin\membership\SelectController;
 use App\Http\Controllers\admin\membership\UserController;
 use App\Http\Controllers\auth\AuthController;
@@ -126,21 +128,43 @@ Route::prefix('/admin')->middleware('auth:sanctum')->group(function () {
         // Document
         Route::prefix('/document')->controller(DocumentController::class)->group(function () {
             Route::get('/', 'index');
+            Route::get('/closedIndex', 'closedIndex');
+            Route::get('/stagnantIndex', 'stagnantIndex');
             Route::post('/store', 'store');
             Route::get('/show/{document}', 'show');
             Route::put('/update/{document}', 'update');
             Route::delete('/destroy/{document}', 'destroy');
             Route::get('/upsertData', 'upsertData');
-        });
+            Route::put('/changeStatus/{document}', 'changeStatus');
 
-        // Petition
-        Route::prefix('/petition')->controller(PetitionController::class)->group(function () {
-            Route::get('/{document}/index', 'index');
-            Route::post('/store', 'store');
-            Route::get('/{document}/show/{petition}', 'show');
-            Route::put('/update/{petition}', 'update');
-            Route::delete('/destroy/{petition}', 'destroy');
-            Route::get('/upsertData', 'upsertData');
+            // Petition
+            Route::prefix('/{document}/petition')->controller(PetitionController::class)->group(function () {
+                Route::get('/', 'index');
+                Route::post('/store', 'store');
+                Route::get('/show/{petition}', 'show');
+                Route::put('/update/{petition}', 'update');
+                Route::delete('/destroy/{petition}', 'destroy');
+            });
+
+            // Ruling
+            Route::prefix('/{document}/ruling')->controller(RulingController::class)->group(function () {
+                Route::get('/', 'index');
+                Route::post('/store', 'store');
+                Route::get('/show/{ruling}', 'show');
+                Route::put('/update/{ruling}', 'update');
+                Route::delete('/destroy/{ruling}', 'destroy');
+                Route::get('/upsertData', 'upsertData');
+            });
+
+            // Protestation
+            Route::prefix('/{document}/protestation')->controller(ProtestationController::class)->group(function () {
+                Route::get('/', 'index');
+                Route::post('/store', 'store');
+                Route::get('/show/{protestation}', 'show');
+                Route::put('/update/{protestation}', 'update');
+                Route::delete('/destroy/{protestation}', 'destroy');
+                Route::get('/upsertData', 'upsertData');
+            });
         });
 
     });

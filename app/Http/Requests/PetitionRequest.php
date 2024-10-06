@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class PetitionRequest extends FormRequest
 {
@@ -12,13 +13,14 @@ class PetitionRequest extends FormRequest
     }
 
 
-    public function rules(): array
+    public function rules(Request $request): array
     {
         return [
             'petition_number' => 'required|unique:petitions,petition_number,' . $this->petition?->id,
-            'petition_date' => 'required|date',
-            'petition_text' => 'required|string',
-
+            'petition_date' => $request->isMethod('POST') ? 'required|date' : 'nullable|date',
+            'petition_text' => 'nullable|string',
+            'files' => 'nullable|array',
+            'files.*' => 'file|mimes:jpg,jpeg,png,pdf|max:2019752',
         ];
     }
 }
