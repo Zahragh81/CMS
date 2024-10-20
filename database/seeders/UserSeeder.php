@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
                 'username' => '5630161237',
                 'first_name' => 'زهرا',
                 'last_name' => 'هاشمی',
-                'mobile' => '0938485943',
+                'mobile' => '09018812581',
                 'password' => '5630161237',
                 'gender_id' => '1',
                 'organization_id' => '2'
@@ -33,10 +33,19 @@ class UserSeeder extends Seeder
                 'username' => '0640949797',
                 'first_name' => 'حمیده',
                 'last_name' => 'بهشتی',
-                'mobile' => '09903594534',
+                'mobile' => '09336957847',
                 'password' => '0640949797',
                 'gender_id' => '1',
                 'organization_id' => '2'
+            ],
+            [
+                'username' => '0640634810',
+                'first_name' => 'تارا',
+                'last_name' => 'قلیزاده',
+                'mobile' => '09905637211',
+                'password' => '0640634810',
+                'gender_id' => '1',
+                'organization_id' => '1'
             ]
         ];
 

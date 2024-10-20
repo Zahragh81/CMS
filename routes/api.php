@@ -6,18 +6,24 @@ use App\Http\Controllers\admin\membership\CourtBranchController;
 use App\Http\Controllers\admin\membership\DocumentController;
 use App\Http\Controllers\admin\membership\JudgesController;
 use App\Http\Controllers\admin\membership\LawyerController;
+use App\Http\Controllers\admin\membership\MeetingController;
 use App\Http\Controllers\admin\membership\OrganizationalPostController;
 use App\Http\Controllers\admin\membership\OrganizationController;
 use App\Http\Controllers\admin\membership\PetitionController;
 use App\Http\Controllers\admin\membership\ProtestationController;
 use App\Http\Controllers\admin\membership\RulingController;
 use App\Http\Controllers\admin\membership\SelectController;
+use App\Http\Controllers\admin\membership\TicketActionController;
+use App\Http\Controllers\admin\membership\TicketController;
 use App\Http\Controllers\admin\membership\UserController;
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
+use App\Models\membership\SmsNotification;
+use App\Models\membership\SmsNotificationRecipient;
 use Illuminate\Support\Facades\Route;
+
 
 // Landing
 Route::get('/landing', LandingController::class);
@@ -165,7 +171,46 @@ Route::prefix('/admin')->middleware('auth:sanctum')->group(function () {
                 Route::delete('/destroy/{protestation}', 'destroy');
                 Route::get('/upsertData', 'upsertData');
             });
+
+            // Meeting
+            Route::prefix('/{document}/meeting')->controller(MeetingController::class)->group(function () {
+                Route::get('/', 'index');
+                Route::post('/store', 'store');
+                Route::get('/show/{meeting}', 'show');
+                Route::put('/update/{meeting}', 'update');
+                Route::delete('/destroy/{meeting}', 'destroy');
+                Route::get('/{meeting}/smsNotification', 'smsNotification');
+                Route::get('/upsertData', 'upsertData');
+            });
         });
+
+        // Calendar
+        Route::get('/calendar', [MeetingController::class, 'calendar']);
+
+        // Ticket
+        Route::prefix('/ticket')->controller(TicketController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::post('/store', 'store');
+            Route::get('/show/{ticket}', 'show');
+            Route::put('/changeStatus/{ticket}', 'changeStatus');
+            Route::get('/upsertData', 'upsertData');
+
+            // TicketAction
+            Route::prefix('/{ticket}/ticketAction')->controller(TicketActionController::class)->group(function () {
+                Route::get('/', 'index');
+                Route::post('/store', 'store');
+                Route::put('/update/{ticketAction}', 'update');
+                Route::post('/organizationUser', 'organizationUser');
+                Route::get('/upsertData', 'upsertData');
+            });
+        });
+
+        // TicketAction
+        Route::prefix('/ticketAction')->controller(TicketActionController::class)->group(function () {
+            Route::put('/changeStatus/{ticketAction}', 'changeStatusTicketAction');
+            Route::get('/upsertData', 'upsertData');
+        });
+
 
     });
 });

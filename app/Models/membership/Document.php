@@ -58,4 +58,9 @@ class Document extends BaseModel
         return $this->hasMany(Protestation::class);
     }
 
+    public function meetings()
+    {
+        return $this->hasMany(Meeting::class);
+    }
+
 }

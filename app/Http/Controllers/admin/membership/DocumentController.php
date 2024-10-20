@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\DocumentRequest;
 use App\Http\Resources\membership\DocumentResource;
+use App\Http\Resources\membership\MeetingResource;
 use App\Models\membership\BranchType;
 use App\Models\membership\CourtBranch;
 use App\Models\membership\Document;
 use App\Models\membership\DocumentStatus;
 use App\Models\membership\DocumentType;
 use App\Models\membership\Lawyer;
+use App\Models\membership\Meeting;
 use App\Models\membership\Situation;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -178,20 +180,11 @@ class DocumentController extends Controller
 
     public function upsertData()
     {
-//        $currentUser = Auth::user();
-
         return self::successResponse([
             'documentTypes' => DocumentType::select(['id', 'name'])->get(),
             'lawyers' => Lawyer::with('user:id,username,first_name,last_name')->select(['id', 'office_name', 'user_id'])->get(),
             'plaintiffs' => User::select(['id', 'username', 'first_name', 'last_name'])->get(),
             'courtBranch' => CourtBranch::select(['id', 'name', 'branch_code'])->get(),
-//            'documentStatuses' => DocumentStatus::select(['id', 'name'])->get(),
-//            'currentUser' => [
-//                'id' => $currentUser->id,
-//                'username' => $currentUser->username,
-//                'first_name' => $currentUser->first_name,
-//                'last_name' => $currentUser->last_name,
-//            ]
         ]);
     }
 

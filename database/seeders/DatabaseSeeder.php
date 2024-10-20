@@ -45,7 +45,22 @@ class DatabaseSeeder extends Seeder
             RulingSeeder::class,
 
             ProtestationStatusSeeder::class,
-            ProtestationSeeder::class
+            ProtestationSeeder::class,
+
+            HoldingTypeSeeder::class,
+            MeetingStatusSeeder::class,
+            MeetingSeeder::class,
+
+            SmsNotificationRecipientSeeder::class,
+
+            TicketGroupSeeder::class,
+            TicketPrioritySeeder::class,
+            TicketStatusSeeder::class,
+            TicketSeeder::class,
+
+            ReferralTypeSeeder::class,
+            TicketActionSeeder::class,
+
         ]);
     }
 }

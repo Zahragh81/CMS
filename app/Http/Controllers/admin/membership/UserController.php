@@ -21,9 +21,6 @@ class UserController extends Controller
                 'organization:id,name'
             ])
             ->where(fn ($q) => user_search($q, $this->search))
-//            ->where(function ($q) {
-//                $q->where('username', 'like', $this->search)->orWhere('last_name', 'like', $this->search);
-//            })
             ->paginate($this->first);
 
         return UserResource::collection($users);
