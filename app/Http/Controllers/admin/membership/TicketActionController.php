@@ -19,9 +19,10 @@ use Illuminate\Support\Facades\Storage;
 
 class TicketActionController extends Controller
 {
-    public function index()
+    public function index($ticketId)
     {
         $userId = Auth::id();
+        $ticket = Ticket::find($ticketId);
 
         $ticketActions = TicketAction::select(['id', 'referral_order', 'description_action', 'progress_percentage', 'referral_type_id', 'referrer_id', 'organization_id', 'referral_recipient_id', 'action_status_id', 'status'])
             ->with(['referralType:id,name',
@@ -34,10 +35,34 @@ class TicketActionController extends Controller
                 $q->where('referrer_id', $userId)
                     ->orWhere('referral_recipient_id', $userId);
             })
+            ->where('ticket_id', $ticketId)
             ->paginate($this->first);
 
         return TicketActionResource::collection($ticketActions);
     }
+
+//    public function index()
+//    {
+//        $userId = Auth::id();
+////        $ticketId = $request->input('ticket_id');
+////        \Log::info($ticketId);
+//
+//        $ticketActions = TicketAction::select(['id', 'referral_order', 'description_action', 'progress_percentage', 'referral_type_id', 'referrer_id', 'organization_id', 'referral_recipient_id', 'action_status_id', 'ticket_id', 'status'])
+//            ->with(['referralType:id,name',
+//                'organization:id,name,national_id',
+//                'referralRecipient:id,username,first_name,last_name',
+//                'actionStatus:id,name',
+//                'files',
+//                'ticket:id,title'
+//            ])
+//            ->whereHas('ticket', function ($q) use  ($userId){
+//                $q->where('referrer_id', $userId)
+//                    ->orWhere('referral_recipient_id', $userId);
+//            })
+//            ->paginate($this->first);
+//
+//        return TicketActionResource::collection($ticketActions);
+//    }
 
 
     public function store(TicketActionRequest $request, Ticket $ticket, TicketAction $ticketAction)
@@ -70,10 +95,21 @@ class TicketActionController extends Controller
     }
 
 
+    public function show(Ticket $ticket, TicketAction $ticketAction)
+    {
+      return new TicketActionResource($ticketAction->load(['files',
+          'referralType:id,name',
+          'organization:id,name,national_id',
+          'referralRecipient:id,username,first_name,last_name',
+          'actionStatus:id,name',
+      ]));
+    }
+
+//یکی اصلی
     public function update(TicketActionRequest $request, Ticket $ticket, TicketAction $ticketAction)
     {
         $input = $request->all();
-        $ticketAction->update($input);
+         $ticketAction->update($input);
 
         if ($request->hasFile('files')) {
             foreach ($ticketAction->files as $file) {

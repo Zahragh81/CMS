@@ -199,6 +199,7 @@ Route::prefix('/admin')->middleware('auth:sanctum')->group(function () {
             Route::prefix('/{ticket}/ticketAction')->controller(TicketActionController::class)->group(function () {
                 Route::get('/', 'index');
                 Route::post('/store', 'store');
+                Route::get('/show/{ticketAction}', 'show');
                 Route::put('/update/{ticketAction}', 'update');
                 Route::post('/organizationUser', 'organizationUser');
                 Route::get('/upsertData', 'upsertData');

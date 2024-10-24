@@ -22,6 +22,7 @@ class TicketActionResource extends JsonResource
             'referralRecipient' => new UserResource($this->whenLoaded('referralRecipient')),
             'actionStatus' => new TicketStatusResource($this->whenLoaded('actionStatus')),
             'files' => FileResource::collection($this->whenLoaded('files')),
+            'ticket' => new TicketActionResource($this->whenLoaded('ticket')),
             'status' => $this->status,
         ];
     }
