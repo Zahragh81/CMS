@@ -7,6 +7,10 @@ use App\Models\User;
 
 class Organization extends BaseModel
 {
+    protected $casts = [
+        'ticket_actions_count' => 'integer'
+    ];
+
     public function users()
     {
         return $this->hasMany(User::class);
@@ -26,4 +30,10 @@ class Organization extends BaseModel
     {
         return $this->morphOne(File::class, 'model');
     }
+
+    public function ticketActions()
+    {
+        return $this->hasMany(TicketAction::class);
+    }
+
 }

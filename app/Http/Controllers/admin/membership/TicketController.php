@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangeStatusTicketRequest;
 use App\Http\Requests\TicketRequest;
 use App\Http\Resources\membership\TicketResource;
+use App\Models\membership\Organization;
 use App\Models\membership\Ticket;
 use App\Models\membership\TicketGroup;
 use App\Models\membership\TicketPriority;

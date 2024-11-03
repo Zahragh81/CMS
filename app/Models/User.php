@@ -7,6 +7,7 @@ use App\Models\membership\Gender;
 use App\Models\membership\Organization;
 use App\Models\membership\SmsNotificationRecipient;
 use App\Models\membership\Ticket;
+use App\Models\membership\TicketAction;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -58,4 +59,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Ticket::class);
     }
+
+    public function receivedReferrals()
+    {
+        return $this->hasMany(TicketAction::class, 'referral_recipient_id');
+    }
+
 }

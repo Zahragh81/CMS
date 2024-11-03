@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\admin\membership\CityController;
 use App\Http\Controllers\admin\membership\CourtBranchController;
+use App\Http\Controllers\admin\membership\DashboardController;
 use App\Http\Controllers\admin\membership\DocumentController;
 use App\Http\Controllers\admin\membership\JudgesController;
 use App\Http\Controllers\admin\membership\LawyerController;
@@ -44,8 +45,6 @@ Route::prefix('/admin')->middleware('auth:sanctum')->group(function () {
 
     // Membership
     Route::prefix('/membership')->group(function () {
-        // Dashboard
-//        Route::get('/dashboard', DashboardController::class);
 
         // Role
         Route::prefix('/role')->controller(RoleController::class)->group(function () {
@@ -210,6 +209,20 @@ Route::prefix('/admin')->middleware('auth:sanctum')->group(function () {
         Route::prefix('/ticketAction')->controller(TicketActionController::class)->group(function () {
             Route::put('/changeStatus/{ticketAction}', 'changeStatusTicketAction');
             Route::get('/upsertData', 'upsertData');
+        });
+
+        // Dashboard
+        Route::prefix('/dashboard')->controller(DashboardController::class)->group(function (){
+            Route::get('/ticketPerYear', 'ticketPerYear');
+            Route::get('/ticketStatus', 'ticketStatus');
+            Route::get('/indexByLowestProgress', 'indexByLowestProgress');
+            Route::get('/ticketGroup', 'ticketGroup');
+            Route::get('/upsertData', 'upsertData');
+            Route::get('/ticketActionCountByOrganization', 'ticketActionCountByOrganization');
+            Route::post('/ticketActionCountByOrganizationAndMonth', 'ticketActionCountByOrganizationAndMonth');
+            Route::get('/topOrganizationsByTicketAction', 'topOrganizationsByTicketAction');
+            Route::get('/topReferralExpert', 'topReferralExpert');
+            Route::get('/topTicketByReferral', 'topTicketByReferral');
         });
 
 

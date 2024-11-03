@@ -37,6 +37,7 @@ class Ticket extends BaseModel
         return $this->morphMany(File::class, 'model');
     }
 
+
     // Attribute
     public function getAverageProgressPercentageAttribute()
     {

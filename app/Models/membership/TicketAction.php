@@ -37,6 +37,11 @@ class TicketAction extends BaseModel
         return $this->belongsTo(User::class, 'referral_recipient_id');
     }
 
+    public function referrals()
+    {
+        return $this->hasMany(TicketAction::class, 'ticket_id');
+    }
+
     public function files()
     {
         return $this->morphMany(File::class, 'model');
