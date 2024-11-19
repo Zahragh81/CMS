@@ -12,7 +12,6 @@ use App\Models\membership\TicketStatus;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Morilog\Jalali\Jalalian;
 
 
@@ -36,7 +35,6 @@ class DashboardController extends Controller
         ];
 
         $tickets = Ticket::whereYear('created_at', date('Y'))
-            ->whereNull('deleted_at')
             ->get()
             ->groupBy(function ($date) {
                 return Jalalian::fromDateTime($date->created_at)->getMonth();
@@ -44,17 +42,17 @@ class DashboardController extends Controller
 
         $ticketCount = array_fill(1, 12, 0);
 
-        foreach ($tickets as $month => $ticketGroup){
+        foreach ($tickets as $month => $ticketGroup) {
             $ticketCount[$month] = $ticketGroup->count();
         }
 
         $result = [];
 
-        foreach ($solarMonth as $mothIndex => $monthName){
+        foreach ($solarMonth as $mothIndex => $monthName) {
             $result[] = [
                 'month' => $monthName,
-                'count' => (int) $ticketCount[$mothIndex]
-             ];
+                'count' => (int)$ticketCount[$mothIndex]
+            ];
         }
 
         return self::successResponse($result);
@@ -86,26 +84,6 @@ class DashboardController extends Controller
     }
 
 
-//    public function indexByLowestProgress()
-//    {
-//        $tickets = Ticket::select(['id', 'title', 'description', 'user_id', 'ticket_group_id', 'ticket_priority_id', 'ticket_status_id', 'status'])
-//            ->with([
-//                'files',
-//                'user:id,username,first_name,last_name',
-//                'ticketGroup:id,name',
-//                'ticketPriority:id,name',
-//                'ticketStatus:id,name',
-//                'actions'
-//            ])
-//            ->withAvg('actions', 'progress_percentage')
-//            ->orderBy('actions_avg_progress_percentage', 'asc')
-//            ->limit(12)
-//            ->simplePaginate($this->first);
-//
-//        return TicketResource::collection($tickets);
-//    }
-
-
     public function indexByLowestProgress()
     {
         $tickets = Ticket::select(['id', 'title', 'description', 'user_id', 'ticket_group_id', 'ticket_priority_id', 'ticket_status_id', 'status'])
@@ -118,31 +96,23 @@ class DashboardController extends Controller
                 'actions'
             ])
             ->withAvg('actions', 'progress_percentage')
-            ->orderBy('actions_avg_progress_percentage', 'asc')
-            ->take(50)
+            ->orderBy('actions_avg_progress_percentage')
+            ->limit(50)
             ->get();
 
-        $perPage = 10;
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $currentItems = $tickets->slice(($currentPage - 1) * $perPage, $perPage)->all();
-        $paginatedItems = new LengthAwarePaginator($currentItems, $tickets->count(), $perPage, $currentPage, [
-            'path' => LengthAwarePaginator::resolveCurrentPath()
-        ]);
-
-        return TicketResource::collection($paginatedItems);
+        return TicketResource::collection($tickets);
     }
 
 
     public function ticketGroup()
     {
-        $groups = TicketGroup::withCount('tickets')
-            ->get();
+        $groups = TicketGroup::withCount('tickets')->get();
 
         $totalTickets = Ticket::count();
         $groupDistribution = [];
 
         foreach ($groups as $group) {
-            $count = (int)$group->tickets_count;
+            $count = (int) $group->tickets_count;
             $percentage = $totalTickets > 0 ? ($count / $totalTickets) * 100 : 0;
 
             $groupDistribution[] = [
@@ -215,7 +185,7 @@ class DashboardController extends Controller
 
             $result[] = [
                 'month' => $months[$i],
-                'count' => (int)$count
+                'count' => $count
             ];
         }
 

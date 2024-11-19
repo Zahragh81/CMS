@@ -1,10 +1,13 @@
 <?php
 
 
+use App\Http\Controllers\admin\membership\AnswerController;
 use App\Http\Controllers\admin\membership\CityController;
 use App\Http\Controllers\admin\membership\CourtBranchController;
 use App\Http\Controllers\admin\membership\DashboardController;
+use App\Http\Controllers\admin\membership\DataFormController;
 use App\Http\Controllers\admin\membership\DocumentController;
+use App\Http\Controllers\admin\membership\FormController;
 use App\Http\Controllers\admin\membership\JudgesController;
 use App\Http\Controllers\admin\membership\LawyerController;
 use App\Http\Controllers\admin\membership\MeetingController;
@@ -12,10 +15,14 @@ use App\Http\Controllers\admin\membership\OrganizationalPostController;
 use App\Http\Controllers\admin\membership\OrganizationController;
 use App\Http\Controllers\admin\membership\PetitionController;
 use App\Http\Controllers\admin\membership\ProtestationController;
+use App\Http\Controllers\admin\membership\QuestionController;
 use App\Http\Controllers\admin\membership\RulingController;
 use App\Http\Controllers\admin\membership\SelectController;
+use App\Http\Controllers\admin\membership\SurveryController;
+use App\Http\Controllers\admin\membership\SurveyController;
 use App\Http\Controllers\admin\membership\TicketActionController;
 use App\Http\Controllers\admin\membership\TicketController;
+use App\Http\Controllers\admin\membership\UnitSelectionController;
 use App\Http\Controllers\admin\membership\UserController;
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\LandingController;
@@ -212,7 +219,7 @@ Route::prefix('/admin')->middleware('auth:sanctum')->group(function () {
         });
 
         // Dashboard
-        Route::prefix('/dashboard')->controller(DashboardController::class)->group(function (){
+        Route::prefix('/dashboard')->controller(DashboardController::class)->group(function () {
             Route::get('/ticketPerYear', 'ticketPerYear');
             Route::get('/ticketStatus', 'ticketStatus');
             Route::get('/indexByLowestProgress', 'indexByLowestProgress');
@@ -225,6 +232,42 @@ Route::prefix('/admin')->middleware('auth:sanctum')->group(function () {
             Route::get('/topTicketByReferral', 'topTicketByReferral');
         });
 
+        // Form
+        Route::prefix('/form')->controller(FormController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::post('/store', 'store');
+            Route::get('/show/{form}', 'show');
+            Route::put('/update/{form}', 'update');
+            Route::delete('/destroy/{form}', 'destroy');
+
+            // Question
+            Route::prefix('/{form}/question')->controller(QuestionController::class)->group(function () {
+                Route::get('/', 'index');
+                Route::post('/store', 'store');
+                Route::get('/show/{question}', 'show');
+                Route::put('/update/{question}', 'update');
+                Route::delete('/destroy/{question}', 'destroy');
+            });
+
+            // Answer
+            Route::prefix('/{form}/answer')->controller(AnswerController::class)->group(function () {
+                Route::get('/', 'index');
+                Route::post('/store', 'store');
+                Route::get('/show/{answer}', 'show');
+                Route::put('/update/{answer}', 'update');
+                Route::delete('/destroy/{answer}', 'destroy');
+            });
+        });
+
+        // UnitSelection
+        Route::prefix('/unitSelection')->controller(UnitSelectionController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::post('/store/{unitSelection}', 'store');
+            Route::get('/show/{unitSelection}', 'show');
+            Route::put('/update/{unitSelection}', 'update');
+            Route::get('/answer', 'answer');
+            Route::get('/upsertData', 'upsertData');
+        });
 
     });
 });

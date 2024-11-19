@@ -19,5 +19,6 @@ class ReferralTypeSeeder extends Seeder
         ];
 
         foreach ($referralTypeNames as $name) ReferralType::create(['name' => $name]);
+
     }
 }

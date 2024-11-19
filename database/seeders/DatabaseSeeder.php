@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Http\Resources\membership\ProtestationStatusResource;
+use App\Models\membership\UnitSelectionStatus;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -61,6 +62,12 @@ class DatabaseSeeder extends Seeder
             ReferralTypeSeeder::class,
             TicketActionSeeder::class,
 
+            LessonSeeder::class,
+            SemesterSeeder::class,
+            MasterSeeder::class,
+            LessonOfferedSeeder::class,
+            UnitSelectionStatusSeeder::class,
+            UnitSelectionSeeder::class
         ]);
     }
 }

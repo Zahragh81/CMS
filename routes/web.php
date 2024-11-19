@@ -2,43 +2,43 @@
 
 use Illuminate\Support\Facades\Route;
 
-//Route::get('/', function () {
-//    $name = 'احمد علی بی خویش';
-//
-//    $query = \App\Models\User::select(['id', 'username', 'first_name', 'last_name']);
-//
-//    $array = explode(' ', $name);
-//
-//    foreach ($array as $search)
-//        $query->whereAny(['username', 'first_name', 'last_name'], 'like', "%$search%");
-//});
-//Route::get('/send-sms', function () {
-//    $webServiceURL  = "http://sms.parsgreen.ir/Api/SendSMS.asmx?WSDL";
-//    $webServiceSignature = "65764460-0D6E-4CE0-BCF5-D77EE5D3C79C";
-//    $webServiceNumber   = "10004004040";
-//    $Mobiles      = array ("09928458681", "0938485943");
-//    mb_internal_encoding("utf-8");
-//    $textMessage="hello World";
-//    $textMessage= mb_convert_encoding($textMessage,"UTF-8");
-//    $parameters['signature'] = $webServiceSignature;
-//    $parameters['from' ]= $webServiceNumber;
-//    $parameters['to' ]  = $Mobiles;
-//    $parameters['text' ]=$textMessage;
-//    $parameters[ 'isFlash'] = false;
-//    $parameters['udh' ]= "";
-//    try
-//    {
-//        $con = new SoapClient($webServiceURL);
-//        $responseSTD = (array) $con ->SendGroupSmsSimple($parameters);
-//        echo 'OutPut Method Value.............................=>';
-//        echo '</br>';
-//        echo  $responseSTD['SendGroupSmsSimpleResult'];
-//    }
-//    catch (SoapFault $ex)
-//    {
-//        echo $ex->faultstring;
-//    }
-//});
+Route::get('/', function () {
+    $name = 'احمد علی بی خویش';
+
+    $query = \App\Models\User::select(['id', 'username', 'first_name', 'last_name']);
+
+    $array = explode(' ', $name);
+
+    foreach ($array as $search)
+        $query->whereAny(['username', 'first_name', 'last_name'], 'like', "%$search%");
+});
+Route::get('/send-sms', function () {
+    $webServiceURL  = "http://sms.parsgreen.ir/Api/SendSMS.asmx?WSDL";
+    $webServiceSignature = "65764460-0D6E-4CE0-BCF5-D77EE5D3C79C";
+    $webServiceNumber   = "10004004040";
+    $Mobiles      = array ("09928458681", "0938485943");
+    mb_internal_encoding("utf-8");
+    $textMessage="hello World";
+    $textMessage= mb_convert_encoding($textMessage,"UTF-8");
+    $parameters['signature'] = $webServiceSignature;
+    $parameters['from' ]= $webServiceNumber;
+    $parameters['to' ]  = $Mobiles;
+    $parameters['text' ]=$textMessage;
+    $parameters[ 'isFlash'] = false;
+    $parameters['udh' ]= "";
+    try
+    {
+        $con = new SoapClient($webServiceURL);
+        $responseSTD = (array) $con ->SendGroupSmsSimple($parameters);
+        echo 'OutPut Method Value.............................=>';
+        echo '</br>';
+        echo  $responseSTD['SendGroupSmsSimpleResult'];
+    }
+    catch (SoapFault $ex)
+    {
+        echo $ex->faultstring;
+    }
+});
 
 //Route::get('/sendSms', function (){
 //    $webServiceURL = "http://sms.parsgreen.ir/Api/SendSMS.asmx?WSDL";
@@ -96,9 +96,9 @@ use Illuminate\Support\Facades\Route;
 //    }
 //});
 
-
-
-Route::get('/', function (){
-    \App\Jobs\SlowJob::dispatch();
-   return view('welcome');
-});
+//
+//
+//Route::get('/', function (){
+//    \App\Jobs\SlowJob::dispatch();
+//   return view('welcome');
+//});
